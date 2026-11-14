@@ -1,0 +1,16 @@
+[Unit]
+Description=Custom Nginx Lab Service
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/tmp/nginx-lab.pid
+ExecStart=/usr/sbin/nginx -c /home/qbd/_projects/nginx-systemd-lab/nginx.conf
+ExecReload=/usr/sbin/nginx -s reload -c /home/qbd/_projects/nginx-systemd-lab/nginx.conf
+ExecStop=/bin/kill -s QUIT $MAINPID
+Restart=on-failure
+User=qbd
+Group=qbd
+
+[Install]
+WantedBy=multi-user.target
