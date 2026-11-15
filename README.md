@@ -13,3 +13,13 @@ Linux (systemd), nginx.
    ```bash
    sudo cp nginx-lab.service /etc/systemd/system/
    sudo systemctl daemon-reload
+
+## Reverse proxy
+
+Nginx проксирует запросы с `/app/` на Python-бэкенд (`127.0.0.1:9000`).
+
+**Как запустить бэкенд:**
+```bash
+python3 -m http.server 9000 --bind 127.0.0.1 --directory backend
+
+(Бэкенд слушает только localhost, снаружи недоступен)
