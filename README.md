@@ -1,25 +1,77 @@
 # nginx-systemd-lab
 
-Учебный проект: запуск nginx с кастомным конфигом под управлением systemd.
+[English](#english) | [Русский](#русский)
 
-## Что делает
-Поднимает nginx на порту 8080, отдаёт статическую страницу, пишет логи в локальную папку. Управляется через собственный unit-файл systemd с автоперезапуском при падении.
+---
 
-## Стек
-Linux (systemd), nginx.
+## Русский
 
-## Запуск
+Учебный проект: запуск nginx с кастомным конфигом под управлением systemd, с reverse proxy и автоперезапуском.
+
+### Стек
+Linux (systemd), Nginx, Python (для тестового бэкенда).
+
+### Запуск
 1. Скопировать unit-файл:
    ```bash
    sudo cp nginx-lab.service /etc/systemd/system/
    sudo systemctl daemon-reload
+   ```
+2. Запустить:
+   ```bash
+   sudo systemctl start nginx-lab
+   ```
+3. Проверить:
+   ```bash
+   curl http://localhost:8080
+   curl http://localhost:8080/app/
+   ```
 
-## Reverse proxy
+### Что ломалось и как починил
+1. Nginx не мог писать в `/var/log/nginx/` из-за прав. Вынес логи в локальную папку `logs/`.
+2. Systemd не подхватывал новый unit. Забыл выполнить `daemon-reload`.
+3. Nginx «падал» сразу после старта. Добавил `Type=forking` и `PIDFile`, так как nginx форкается.
 
-Nginx проксирует запросы с `/app/` на Python-бэкенд (`127.0.0.1:9000`).
+### Ограничения
+- Нет HTTPS (только HTTP).
+- Статический конфиг, без переменных окружения.
 
-**Как запустить бэкенд:**
-```bash
-python3 -m http.server 9000 --bind 127.0.0.1 --directory backend
+### Лицензия
+MIT
 
-(Бэкенд слушает только localhost, снаружи недоступен)
+---
+
+## English
+
+Educational project: running nginx with a custom config managed by systemd, including reverse proxy and auto-restart.
+
+### Stack
+Linux (systemd), Nginx, Python (for test backend).
+
+### Usage
+1. Copy the unit file:
+   ```bash
+   sudo cp nginx-lab.service /etc/systemd/system/
+   sudo systemctl daemon-reload
+   ```
+2. Start:
+   ```bash
+   sudo systemctl start nginx-lab
+   ```
+3. Check:
+   ```bash
+   curl http://localhost:8080
+   curl http://localhost:8080/app/
+   ```
+
+### What broke and how I fixed it
+1. Nginx couldn't write to `/var/log/nginx/` due to permissions. Moved logs to a local `logs/` folder.
+2. Systemd didn't pick up the new unit. Forgot to run `daemon-reload`.
+3. Nginx "crashed" right after start. Added `Type=forking` and `PIDFile` because nginx forks.
+
+### Limitations
+- No HTTPS (HTTP only).
+- Static config, no environment variables.
+
+### License
+MIT
