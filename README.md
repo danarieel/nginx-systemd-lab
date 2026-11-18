@@ -18,6 +18,7 @@
    ```
 2. Запустить: `sudo systemctl start nginx-lab`
 3. Проверить: `curl http://localhost:8080` и `curl http://localhost:8080/app/`
+**Важно перед запуском:** Скопируйте проект в `/opt/nginx-systemd-lab` (или измените пути в `nginx.conf` и `nginx-lab.service` на актуальные). Также замените `User=qbd` в `nginx-lab.service` на вашего пользователя.
 
 **Что ломалось и как починил:**
 1. Nginx не мог писать в `/var/log/nginx/` из-за прав. Вынес логи в локальную папку `logs/`.
@@ -44,6 +45,7 @@ Educational project: running nginx with a custom config managed by systemd, incl
    ```
 2. Start: `sudo systemctl start nginx-lab`
 3. Check: `curl http://localhost:8080` and `curl http://localhost:8080/app/`
+**Important before running:** Copy the project to `/opt/nginx-systemd-lab` (or update the paths in `nginx.conf` and `nginx-lab.service`). Also, change `User=qbd` in `nginx-lab.service` to your username.
 
 **What broke & how I fixed it:**
 1. Nginx couldn't write to `/var/log/nginx/` due to permissions. Moved logs to a local `logs/` folder.
